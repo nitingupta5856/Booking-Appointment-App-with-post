@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta name="viewport"  initial-scale=1.0">
     <title>Form</title>
    
 </head>
@@ -46,10 +46,10 @@
         email,
         phone
     }
-    axios.post("https://crudcrud.com/api/484552587a904e718024e5d041646191/AppointmentData", obj)
+    axios.post("https://crudcrud.com/api/c53e9f560bfc44b79b12795d55f2c7d2/AppointmentData", obj)
  .then((respone)=>{
     showNewUser(respone)
-   console.log(respone)
+//    console.log(respone)
  })
  .catch((err)=>{
     document.body.innerHTML= document.body.innerHTML+`<h1>something wrong</h1>`
@@ -63,16 +63,28 @@
      
  }
  window.addEventListener("DOMContentLoaded",()=>{
-    const localStorageObj =localStorage;
-    const localStoragekeys =Object.keys(localStorageObj);
-    for(var i=0;i<localStoragekeys.length;i++){
-        // const key =localStoragekeys[i];
-        // const userDetailsString =localStorageObj[key];
-        // const userDetailsObj = JSON.parse(userDetailsString);
-        const userDetailsObj= JSON.parse(localStorageObj[localStoragekeys[i]])
-        showNewUser(userDetailsObj);
+    axios.get('https://crudcrud.com/api/c53e9f560bfc44b79b12795d55f2c7d2/AppointmentData')
+    .then((response)=>{
+      console.log(response)
+      
+      
+      for(var i=0; i<response.length;i++){
+        showNewUser(response[i])
+      }
+    })
+    .catch((error)=>{
+console.log(error)
+    })
+    // const localStorageObj =localStorage;
+    // const localStoragekeys =Object.keys(localStorageObj);
+    // for(var i=0;i<localStoragekeys.length;i++){
+    //     // const key =localStoragekeys[i];
+    //     // const userDetailsString =localStorageObj[key];
+    //     // const userDetailsObj = JSON.parse(userDetailsString);
+    //     const userDetailsObj= JSON.parse(localStorageObj[localStoragekeys[i]])
+    //     showNewUser(userDetailsObj);
        
-    }
+    // }
  })
     function showNewUser(user){
         document.getElementById('username').value='';
