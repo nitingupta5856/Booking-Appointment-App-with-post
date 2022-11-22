@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>Form</title>
+   
+</head>
+<body>
+    <form  style="border: 1px solid black; width:500px; margin-right: 500px; margin: auto;" onsubmit="onsubmitbtn(event)">
+        <h3 style="color: red; text-align: center;">Book a Call</h3>
+        <p style=" text-align: center;">Book a call slot and our representative  you within 1hr of selected time</p>
+        <hr style="margin:5px ;">
+    <label style="margin: 5px;" >Name:</label>
+    <br>
+    <input id="username" type="text" name="username"  style="width: 480px; height: 25px; margin: 5px;" required>
+    <br>
+    <label for="email" style="margin: 5px;">Email:</label>
+    <br>
+    <input id="email" type="email" name="email"  style="width: 480px; height: 25px; margin: 5px;" required>
+    <br>
+    <label for="phone" style="margin: 5px;">Phone:</label>
+    <br>
+    <input id="phone" type="number" name="phone"  style="width: 480px; height: 25px; margin: 5px;" >
+    <br>
+  
+    
+    <br><br>
+   <button style="width: 490px; background-color: orange;border: none; height: 25px; margin: 5px; border-radius: 5%;" >GET A CALL</button>
+</form>
+<ul id="parentnode"></ul>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.2.0/axios.min.js"></script>
+<script>
+    function onsubmitbtn(event){
+    event.preventDefault();
+    const name=event.target.username.value;
+    const email=event.target.email.value;
+    const phone=event.target.phone.value;
+    // localStorage.setItem('name',name);
+    // localStorage.setItem('email',email);
+    // localStorage.setItem('phone',phone);
+    // console.log(event)
+    const obj={
+        name,
+        email,
+        phone
+    }
+    axios.post("https://crudcrud.com/api/484552587a904e718024e5d041646191/AppointmentData", obj)
+ .then((respone)=>{
+    showNewUser(respone)
+   console.log(respone)
+ })
+ .catch((err)=>{
+    document.body.innerHTML= document.body.innerHTML+`<h1>something wrong</h1>`
+   console.log(err)
+ })
+    // localStorage.setItem ('userdetails',JSON.stringify(obj))
+    // localStorage.setItem (obj.email,JSON.stringify(obj));
+    // console.log(JSON.parse(localStorage.getItem(obj.email)))
+
+    // showNewUser(obj);
+     
+ }
+ window.addEventListener("DOMContentLoaded",()=>{
+    const localStorageObj =localStorage;
+    const localStoragekeys =Object.keys(localStorageObj);
+    for(var i=0;i<localStoragekeys.length;i++){
+        // const key =localStoragekeys[i];
+        // const userDetailsString =localStorageObj[key];
+        // const userDetailsObj = JSON.parse(userDetailsString);
+        const userDetailsObj= JSON.parse(localStorageObj[localStoragekeys[i]])
+        showNewUser(userDetailsObj);
+       
+    }
+ })
+    function showNewUser(user){
+        document.getElementById('username').value='';
+        document.getElementById('email').value='';
+        document.getElementById('phone').value='';
+        if (localStorage.getItem(user.email) !== null){
+        removeUserFromScreen(user.email);
+        };
+const parentnode=document.getElementById('parentnode');
+const childnode =`<li id=${user.email}>${user.name}  - ${user.email} - ${user.phone}
+    <button onClick=deleteUser('${user.email}')>Delete user</button>
+    <button onClick=editUser('${user.email}','${user.name}','${user.phone}')>Edit</button>
+    </li>`
+parentnode.innerHTML=parentnode.innerHTML+childnode;
+    }
+
+    // edit user
+    function editUser(emailId,name,phone){
+        document.getElementById('username').value=name;
+        document.getElementById('email').value=emailId;
+        document.getElementById('phone').value=phone;
+        deleteUser (emailId)
+       
+    }
+
+  // delete user
+   function deleteUser (emailId){
+    console.log(emailId)
+    localStorage.removeItem(emailId);
+    removeUserFromScreen(emailId)
+   }
+   function  removeUserFromScreen(emailId){
+    const parentnode=document.getElementById('parentnode');
+    const childNodeForDelete=document.getElementById(emailId);
+   if(childNodeForDelete){
+    parentnode.removeChild(childNodeForDelete);
+   }
+        
+  
+   
+   }
+
+</script>
+
+</body>
+</html>
